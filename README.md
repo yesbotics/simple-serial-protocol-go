@@ -1,1 +1,1 @@
-# -simple-serial-protocol-go
+# simple-serial-protocol-go
