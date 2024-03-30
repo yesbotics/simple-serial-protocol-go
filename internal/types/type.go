@@ -19,3 +19,9 @@ type Type[T byte | int8 | uint8 | int16 | uint16 | int32 | uint32 | int64 | uint
 	GetBuffer(data T) []byte
 	GetLength() uint32
 }
+
+//func GetBuffer[T byte | int8 | uint8 | int16 | uint16 | int32 | uint32 | int64 | uint64 | bool | float32 | string](paramType ssp.ParamType, data T) []byte {
+//	b := make([]byte, 2)
+//	binary.LittleEndian.PutUint16(b, data)
+//	return b
+//}

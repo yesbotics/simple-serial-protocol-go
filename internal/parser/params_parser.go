@@ -7,8 +7,8 @@ import (
 )
 
 type ParamsParser struct {
-    params       []interface{}
-    currentParam interface{}
+    params       []any
+    currentParam any
     paramIndex   int
     paramCount   int
     hasParams    bool
@@ -19,30 +19,43 @@ func NewParamsParser(paramTypes []*ssp.ParamType) *ParamsParser {
     //var test = params.TypeByte{}
     //var typeInstances []*params.Type = make([]*params.Type, 0)
     //var typeInstances []*params.Type
-    var params []interface{}
+    var params []any
 
     for _, paramType := range paramTypes {
         switch *paramType {
         case ssp.ParamTypeByte:
             params = append(params, &(types.TypeByte{}))
         case ssp.ParamTypeBool:
+            params = append(params, &(types.TypeBool{}))
         case ssp.ParamTypeInt8:
             params = append(params, &(types.TypeInt8{}))
-        case ssp.ParamTypeUInt8:
-            params = append(params, &(types.TypeUInt8{}))
+        case ssp.ParamTypeUint8:
+            params = append(params, &(types.TypeUint8{}))
         case ssp.ParamTypeInt16:
-        case ssp.ParamTypeUInt16:
+            params = append(params, &(types.TypeInt16{}))
+        case ssp.ParamTypeUint16:
+            params = append(params, &(types.TypeUint16{}))
         case ssp.ParamTypeInt32:
-        case ssp.ParamTypeUInt32:
+            params = append(params, &(types.TypeInt32{}))
+        case ssp.ParamTypeUint32:
+            params = append(params, &(types.TypeUint32{}))
         case ssp.ParamTypeInt64:
-        case ssp.ParamTypeUInt64:
-        case ssp.ParamTypeFloat:
+            params = append(params, &(types.TypeInt64{}))
+        case ssp.ParamTypeUint64:
+            params = append(params, &(types.TypeUint64{}))
+        case ssp.ParamTypeFloat32:
+            params = append(params, &(types.TypeFloat32{}))
+        case ssp.ParamTypeFloat64:
+            params = append(params, &(types.TypeFloat64{}))
+        case ssp.ParamTypeChar:
+            params = append(params, &(types.TypeChar{}))
         case ssp.ParamTypeString:
+            params = append(params, &(types.TypeString{}))
         }
     }
 
     var hasParams = len(params) > 0
-    var firstParam interface{} = nil
+    var firstParam any = nil
 
     if hasParams {
         firstParam = params[0]
@@ -107,8 +120,8 @@ func (r *ParamsParser) Reset() {
     }
 }
 
-func (r *ParamsParser) GetData() []interface{} {
-    var data []interface{}
+func (r *ParamsParser) GetData() []any {
+    var data []any
     if r.hasParams {
         for _, param := range r.params {
             data = append(r.getDataSwitched(param))
@@ -118,10 +131,9 @@ func (r *ParamsParser) GetData() []interface{} {
     return data
 }
 
-func (r *ParamsParser) getDataSwitched(param interface{}) {
+func (r *ParamsParser) getDataSwitched(param any) {
     switch typeClass := param.(type) {
     case types.TypeByte:
         typeClass.
-
     }
 }

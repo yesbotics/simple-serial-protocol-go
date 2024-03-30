@@ -1,5 +1,5 @@
 package types
 
 type TypeByte struct {
-	TypeUInt8
+	TypeUint8
 }

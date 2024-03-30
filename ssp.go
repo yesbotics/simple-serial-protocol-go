@@ -1,6 +1,9 @@
 package ssp
 
-import "fmt"
+import (
+	"fmt"
+	"yesbotics/ssp/internal/parser"
+)
 
 type Ssp struct {
 	portname string
@@ -17,7 +20,8 @@ type Command struct {
 type CallbackFunc func(args ...interface{})
 
 const (
-	CharEot byte = 0x0A // End of Transmission - Line Feed Zeichen \n
+	CharEot  byte = 0x0A // End of Transmission - Line Feed Zeichen \n
+	CharNull byte = 0x00 // End of String
 )
 
 func New(portname string, baudrate int32) *Ssp {
@@ -42,13 +46,14 @@ func (s *Ssp) UnregisterCommand(commandId byte) {
 
 func (s *Ssp) WriteCommand(config WriteCommandConfig) {
 	s.write([]byte{config.GetCommandId()})
-	if !config.HasParameters() {
-		return
+
+	if config.HasParameters() {
+		for _, commandParam := range config.GetCommandParams() {
+			parser.BufferCeator.GetBuffer(commandParam.paramType, commandParam.value)
+		}
 	}
 
-	for _, commandParam := range config.GetCommandParams() {
-
-	}
+	s.write([]byte{CharEot})
 }
 
 func (s *Ssp) initParamTypes() {

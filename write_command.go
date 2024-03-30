@@ -2,7 +2,7 @@ package ssp
 
 type CommandParam struct {
 	paramType ParamType
-	value     interface{}
+	value     any
 }
 
 type WriteCommandConfig struct {
