@@ -2,11 +2,11 @@ package ssp
 
 type ReadCommandConfig struct {
 	commandId byte
-	callback  CallbackFunc
+	callback  CommandCallback
 	types     []ParamType
 }
 
-func NewReadCommandConfig(commandId byte, callback CallbackFunc) *ReadCommandConfig {
+func NewReadCommandConfig(commandId byte, callback CommandCallback) *ReadCommandConfig {
 	config := &ReadCommandConfig{
 		commandId: commandId,
 		callback:  callback,
@@ -15,7 +15,7 @@ func NewReadCommandConfig(commandId byte, callback CallbackFunc) *ReadCommandCon
 	return config
 }
 
-func (r *ReadCommandConfig) GetCallback() CallbackFunc {
+func (r *ReadCommandConfig) GetCallback() CommandCallback {
 	return r.callback
 }
 

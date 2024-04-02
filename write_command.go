@@ -10,10 +10,46 @@ type WriteCommandConfig struct {
 	commandParams []CommandParam
 }
 
-func NewWriteCommandConfig(commandId byte) *WriteCommandConfig {
+func NewWriteCommandConfig(commandId byte, commandParams []any) *WriteCommandConfig {
+
+	var params []CommandParam
+
+	for _, commandParam := range commandParams {
+		switch commandParam.(type) {
+		case byte:
+			params = append(params, CommandParam{ParamTypeByte, commandParam})
+		case bool:
+			params = append(params, CommandParam{ParamTypeBool, commandParam})
+		case int8:
+			params = append(params, CommandParam{ParamTypeInt8, commandParam})
+		//case uint8:
+		//	params = append(params, CommandParam{ParamTypeUint8, commandParam})
+		case int16:
+			params = append(params, CommandParam{ParamTypeInt16, commandParam})
+		case uint16:
+			params = append(params, CommandParam{ParamTypeUint16, commandParam})
+		case int32:
+			params = append(params, CommandParam{ParamTypeInt32, commandParam})
+		case uint32:
+			params = append(params, CommandParam{ParamTypeUint32, commandParam})
+		case int64:
+			params = append(params, CommandParam{ParamTypeInt64, commandParam})
+		case uint64:
+			params = append(params, CommandParam{ParamTypeUint64, commandParam})
+		case float32:
+			params = append(params, CommandParam{ParamTypeFloat32, commandParam})
+		case float64:
+			params = append(params, CommandParam{ParamTypeFloat64, commandParam})
+		//case ssp.ParamTypeChar:
+		//	params = append(params, &(types.TypeChar{}))
+		case string:
+			params = append(params, CommandParam{ParamTypeString, commandParam})
+		}
+	}
+
 	config := &WriteCommandConfig{
 		commandId:     commandId,
-		commandParams: []CommandParam{},
+		commandParams: params,
 	}
 
 	return config

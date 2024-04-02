@@ -58,10 +58,12 @@ update: FORCE
 
 test: FORCE
 
-dev: FORCE
+
+example: FORCE dev
+	cd examples/echo_example
 	DEBUG=1 go run .
 
-run: FORCE dev
+dev: FORCE example
 
 log: FORCE
 	tail -f debug.log
