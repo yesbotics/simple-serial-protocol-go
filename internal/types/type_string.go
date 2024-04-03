@@ -1,16 +1,12 @@
 package types
 
-import (
-	"yesbotics/ssp/internal/parser"
-)
-
 type TypeString struct {
 	BaseType
 	isFull bool
 }
 
 func (t *TypeString) AddByte(bite byte) {
-	if bite == parser.CharNull {
+	if bite == CharNull {
 		t.isFull = true
 		return
 	}
@@ -27,7 +23,7 @@ func (t *TypeString) GetData() (string, error) {
 
 func (t *TypeString) GetBuffer(data string) []byte {
 	b := []byte(data)
-	b = append(b, parser.CharNull)
+	b = append(b, CharNull)
 	return b
 }
 

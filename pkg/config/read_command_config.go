@@ -1,4 +1,4 @@
-package ssp
+package config
 
 type ReadCommandConfig struct {
 	commandId byte

@@ -2,13 +2,8 @@ package parser
 
 import (
 	"errors"
-	"yesbotics/ssp"
 	"yesbotics/ssp/internal/types"
-)
-
-const (
-	CharEot  byte = 0x0A // End of Transmission - Line Feed Zeichen \n
-	CharNull byte = 0x00 // End of String
+	"yesbotics/ssp/pkg/config"
 )
 
 type ParamsParser struct {
@@ -19,7 +14,7 @@ type ParamsParser struct {
 	hasParams    bool
 }
 
-func NewParamsParser(paramTypes []ssp.ParamType) *ParamsParser {
+func NewParamsParser(paramTypes []config.ParamType) *ParamsParser {
 
 	//var test = params.TypeByte{}
 	//var typeInstances []*params.Type = make([]*params.Type, 0)
@@ -28,33 +23,33 @@ func NewParamsParser(paramTypes []ssp.ParamType) *ParamsParser {
 
 	for _, paramType := range paramTypes {
 		switch paramType {
-		case ssp.ParamTypeByte:
+		case config.ParamTypeByte:
 			params = append(params, &(types.TypeByte{}))
-		case ssp.ParamTypeBool:
+		case config.ParamTypeBool:
 			params = append(params, &(types.TypeBool{}))
-		case ssp.ParamTypeInt8:
+		case config.ParamTypeInt8:
 			params = append(params, &(types.TypeInt8{}))
-		case ssp.ParamTypeUint8:
+		case config.ParamTypeUint8:
 			params = append(params, &(types.TypeUint8{}))
-		case ssp.ParamTypeInt16:
+		case config.ParamTypeInt16:
 			params = append(params, &(types.TypeInt16{}))
-		case ssp.ParamTypeUint16:
+		case config.ParamTypeUint16:
 			params = append(params, &(types.TypeUint16{}))
-		case ssp.ParamTypeInt32:
+		case config.ParamTypeInt32:
 			params = append(params, &(types.TypeInt32{}))
-		case ssp.ParamTypeUint32:
+		case config.ParamTypeUint32:
 			params = append(params, &(types.TypeUint32{}))
-		case ssp.ParamTypeInt64:
+		case config.ParamTypeInt64:
 			params = append(params, &(types.TypeInt64{}))
-		case ssp.ParamTypeUint64:
+		case config.ParamTypeUint64:
 			params = append(params, &(types.TypeUint64{}))
-		case ssp.ParamTypeFloat32:
+		case config.ParamTypeFloat32:
 			params = append(params, &(types.TypeFloat32{}))
-		case ssp.ParamTypeFloat64:
+		case config.ParamTypeFloat64:
 			params = append(params, &(types.TypeFloat64{}))
-		case ssp.ParamTypeChar:
+		case config.ParamTypeChar:
 			params = append(params, &(types.TypeChar{}))
-		case ssp.ParamTypeString:
+		case config.ParamTypeString:
 			params = append(params, &(types.TypeString{}))
 		}
 	}

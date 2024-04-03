@@ -1,8 +1,10 @@
-package ssp
+package config
+
+type CommandCallback func(args ...any)
 
 type CommandParam struct {
-	paramType ParamType
-	value     any
+	ParamType ParamType
+	Value     any
 }
 
 type WriteCommandConfig struct {
@@ -65,22 +67,22 @@ func (r *WriteCommandConfig) GetCommandParams() []CommandParam {
 
 func (r *WriteCommandConfig) AddByteValue(value byte) *WriteCommandConfig {
 	r.commandParams = append(r.commandParams, CommandParam{
-		paramType: ParamTypeByte,
-		value:     value,
+		ParamType: ParamTypeByte,
+		Value:     value,
 	})
 	return r
 }
 func (r *WriteCommandConfig) addBooleanValue(value bool) *WriteCommandConfig {
 	r.commandParams = append(r.commandParams, CommandParam{
-		paramType: ParamTypeBool,
-		value:     value,
+		ParamType: ParamTypeBool,
+		Value:     value,
 	})
 	return r
 }
 func (r *WriteCommandConfig) addInt8Value(value int8) *WriteCommandConfig {
 	r.commandParams = append(r.commandParams, CommandParam{
-		paramType: ParamTypeInt8,
-		value:     value,
+		ParamType: ParamTypeInt8,
+		Value:     value,
 	})
 	return r
 }

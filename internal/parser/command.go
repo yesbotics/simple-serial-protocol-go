@@ -1,14 +1,16 @@
 package parser
 
-import "yesbotics/ssp"
+import (
+	"yesbotics/ssp/pkg/config"
+)
 
 type Command struct {
 	commandId    byte
-	callback     ssp.CommandCallback
+	callback     config.CommandCallback
 	paramsParser *ParamsParser
 }
 
-func NewCommand(commandId byte, callback ssp.CommandCallback, paramTypes []ssp.ParamType) *Command {
+func NewCommand(commandId byte, callback config.CommandCallback, paramTypes []config.ParamType) *Command {
 	return &Command{
 		commandId:    commandId,
 		callback:     callback,

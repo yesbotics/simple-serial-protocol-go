@@ -1,12 +1,12 @@
 package parser
 
 import (
-	"yesbotics/ssp"
 	"yesbotics/ssp/internal/types"
+	"yesbotics/ssp/pkg/config"
 )
 
 type bufferCreator struct {
-	types map[ssp.ParamType]interface{}
+	types map[config.ParamType]any
 }
 
 var BufferCeator bufferCreator = newBufferCreator()
@@ -14,20 +14,27 @@ var BufferCeator bufferCreator = newBufferCreator()
 func newBufferCreator() bufferCreator {
 
 	creator := bufferCreator{
-		//types: map[ssp.ParamType]*interface{}{},
+		types: make(map[config.ParamType]any),
 	}
 
-	creator.types[ssp.ParamTypeByte] = types.TypeByte{}
-	creator.types[ssp.ParamTypeInt8] = types.TypeByte{}
-	creator.types[ssp.ParamTypeInt16] = types.TypeByte{}
-	creator.types[ssp.ParamTypeUint8] = types.TypeByte{}
-	creator.types[ssp.ParamTypeUint16] = types.TypeByte{}
+	creator.types[config.ParamTypeBool] = types.TypeBool{}
+	creator.types[config.ParamTypeByte] = types.TypeByte{}
+	creator.types[config.ParamTypeInt8] = types.TypeInt8{}
+	creator.types[config.ParamTypeInt16] = types.TypeInt16{}
+	creator.types[config.ParamTypeInt32] = types.TypeInt32{}
+	creator.types[config.ParamTypeInt64] = types.TypeInt64{}
+	creator.types[config.ParamTypeUint8] = types.TypeUint8{}
+	creator.types[config.ParamTypeUint16] = types.TypeUint16{}
+	creator.types[config.ParamTypeUint32] = types.TypeUint32{}
+	creator.types[config.ParamTypeUint64] = types.TypeUint64{}
+	creator.types[config.ParamTypeFloat32] = types.TypeFloat32{}
+	creator.types[config.ParamTypeFloat64] = types.TypeFloat64{}
+	creator.types[config.ParamTypeString] = types.TypeString{}
 
 	return creator
 }
 
-// func (b *bufferCreator) getBuffer[T byte | int8 | uint8 | int16 | uint16 | int32 | uint32 | int64 | uint64 | bool | float32 | string](paramType ssp.ParamType, data T) []byte {
-func (b *bufferCreator) GetBuffer(paramType ssp.ParamType, data any) []byte {
+func (b *bufferCreator) GetBuffer(paramType config.ParamType, data any) []byte {
 	theType := b.types[paramType]
 
 	switch inst := theType.(type) {

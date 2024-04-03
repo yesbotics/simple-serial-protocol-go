@@ -45,8 +45,15 @@ tar-gz: FORCE
 install: FORCE build
 	go install .
 
-setup: FORCE
+setup: FORCE setup-lib setup-example
+
+setup-lib: FORCE
 	mkdir -p $(BUILD_DIR)
+	go mod vendor
+	go mod tidy
+
+setup-example: FORCE
+	cd examples/echo_example
 	go mod vendor
 	go mod tidy
 
@@ -58,12 +65,11 @@ update: FORCE
 
 test: FORCE
 
-
-example: FORCE dev
+run-example: FORCE
 	cd examples/echo_example
 	DEBUG=1 go run .
 
-dev: FORCE example
+dev: FORCE run-example
 
 log: FORCE
 	tail -f debug.log

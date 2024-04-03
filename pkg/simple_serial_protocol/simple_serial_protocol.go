@@ -1,4 +1,4 @@
-package ssp
+package simple_serial_protocol
 
 import (
 	"encoding/hex"
@@ -7,9 +7,11 @@ import (
 	"go.bug.st/serial"
 	"log/slog"
 	"yesbotics/ssp/internal/parser"
+	"yesbotics/ssp/internal/types"
+	"yesbotics/ssp/pkg/config"
 )
 
-type Ssp struct {
+type SimpleSerialProcol struct {
 	portname       string
 	baudrate       int
 	commands       map[byte]*parser.Command
@@ -19,9 +21,7 @@ type Ssp struct {
 	currentCommand *parser.Command
 }
 
-type CommandCallback func(args ...any)
-
-func NewSsp(portname string, baudrate int) *Ssp {
+func NewSsp(portname string, baudrate int) *SimpleSerialProcol {
 
 	mode := &serial.Mode{
 		BaudRate: baudrate,
@@ -30,18 +30,18 @@ func NewSsp(portname string, baudrate int) *Ssp {
 		StopBits: serial.OneStopBit,
 	}
 
-	ssp := &Ssp{
-		portname:  portname,
-		baudrate:  baudrate,
-		mode:      mode,
-		port:      nil,
-		connected: false,
+	return &SimpleSerialProcol{
+		portname:       portname,
+		baudrate:       baudrate,
+		commands:       make(map[byte]*parser.Command),
+		port:           nil,
+		mode:           mode,
+		connected:      false,
+		currentCommand: nil,
 	}
-
-	return ssp
 }
 
-func (s *Ssp) Open() error {
+func (s *SimpleSerialProcol) Open() error {
 	port, err := serial.Open(s.portname, s.mode)
 	if err != nil {
 		return err
@@ -55,7 +55,7 @@ func (s *Ssp) Open() error {
 	return nil
 }
 
-func (s *Ssp) Close() {
+func (s *SimpleSerialProcol) Close() {
 	s.connected = false
 	if s.port != nil {
 		_ = (*s.port).Close()
@@ -63,12 +63,12 @@ func (s *Ssp) Close() {
 	s.port = nil
 }
 
-func (s *Ssp) Dispose() {
+func (s *SimpleSerialProcol) Dispose() {
 	s.Close()
 	s.commands = make(map[byte]*parser.Command)
 }
 
-func (s *Ssp) RegisterCommand(command *ReadCommandConfig) {
+func (s *SimpleSerialProcol) RegisterCommand(command *config.ReadCommandConfig) {
 	s.commands[command.GetCommandId()] = parser.NewCommand(
 		command.GetCommandId(),
 		command.GetCallback(),
@@ -76,11 +76,11 @@ func (s *Ssp) RegisterCommand(command *ReadCommandConfig) {
 	)
 }
 
-//func (s *Ssp) RegisterCommand(commandId byte, callback CommandCallback) {
+//func (s *SimpleSerialProcol) RegisterCommand(commandId byte, callback CommandCallback) {
 //	s.commands[commandId] = parser.NewCommand(commandId, callback)
 //}
 
-func (s *Ssp) UnregisterCommand(commandId byte) {
+func (s *SimpleSerialProcol) UnregisterCommand(commandId byte) {
 	command := s.commands[commandId]
 	if command != nil {
 		command.Dispose()
@@ -88,7 +88,7 @@ func (s *Ssp) UnregisterCommand(commandId byte) {
 	delete(s.commands, commandId)
 }
 
-func (s *Ssp) WriteCommand(config *WriteCommandConfig) error {
+func (s *SimpleSerialProcol) WriteCommand(config *config.WriteCommandConfig) error {
 	_, err := s.write([]byte{config.GetCommandId()})
 	if err != nil {
 		return err
@@ -96,14 +96,14 @@ func (s *Ssp) WriteCommand(config *WriteCommandConfig) error {
 
 	if config.HasParameters() {
 		for _, commandParam := range config.GetCommandParams() {
-			_, err = s.write(parser.BufferCeator.GetBuffer(commandParam.paramType, commandParam.value))
+			_, err = s.write(parser.BufferCeator.GetBuffer(commandParam.ParamType, commandParam.Value))
 			if err != nil {
 				return err
 			}
 		}
 	}
 
-	_, err = s.write([]byte{parser.CharEot})
+	_, err = s.write([]byte{types.CharEot})
 	if err != nil {
 		return err
 	}
@@ -111,12 +111,12 @@ func (s *Ssp) WriteCommand(config *WriteCommandConfig) error {
 	return nil
 }
 
-func (s *Ssp) write(buffer []byte) (int, error) {
+func (s *SimpleSerialProcol) write(buffer []byte) (int, error) {
 	fmt.Printf("W: %s", buffer)
 	return (*s.port).Write(buffer)
 }
 
-func (s *Ssp) readSerialData() {
+func (s *SimpleSerialProcol) readSerialData() {
 	buffer := make([]byte, 128)
 	for {
 		if !s.connected {
@@ -133,7 +133,7 @@ func (s *Ssp) readSerialData() {
 	}
 }
 
-func (s *Ssp) onData(bytes []byte) error {
+func (s *SimpleSerialProcol) onData(bytes []byte) error {
 
 	bite := bytes[0]
 
@@ -142,7 +142,7 @@ func (s *Ssp) onData(bytes []byte) error {
 		 * Got command already -> reading param data
 		 */
 		if s.currentCommand.ParamsRead() {
-			if bite == parser.CharEot {
+			if bite == types.CharEot {
 				s.currentCommand.CallCallback()
 				s.currentCommand = nil
 			} else {
