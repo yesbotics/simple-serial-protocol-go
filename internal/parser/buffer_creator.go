@@ -44,6 +44,8 @@ func (b *bufferCreator) GetBuffer(paramType config.ParamType, data any) []byte {
 		return inst.GetBuffer(data.(byte))
 	case types.TypeBool:
 		return inst.GetBuffer(data.(bool))
+	case types.TypeInt8:
+		return inst.GetBuffer(data.(int8))
 	case types.TypeUint8:
 		return inst.GetBuffer(data.(uint8))
 	case types.TypeInt16:

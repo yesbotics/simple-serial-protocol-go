@@ -102,5 +102,5 @@ void onReceivedValues() {
 }
 
 void onError(uint8_t errorNum) {
-    //digitalWrite(LED_BUILTIN, HIGH);
+    digitalWrite(LED_BUILTIN, HIGH);
 }

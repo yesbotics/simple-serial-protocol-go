@@ -112,7 +112,7 @@ func (s *SimpleSerialProcol) WriteCommand(config *config.WriteCommandConfig) err
 }
 
 func (s *SimpleSerialProcol) write(buffer []byte) (int, error) {
-	fmt.Printf("W: %s", buffer)
+	fmt.Printf("Write: %#x\n", buffer)
 	return (*s.port).Write(buffer)
 }
 
@@ -125,12 +125,16 @@ func (s *SimpleSerialProcol) readSerialData() {
 
 		n, err := (*s.port).Read(buffer)
 		if err != nil {
+			fmt.Println("readSerialData cancel")
 			slog.Error(fmt.Sprintf("\"Could not read serial data: %s", err))
 			return
 		}
 
+		fmt.Println("Got data!")
+
 		_ = s.onData(buffer[:n])
 	}
+
 }
 
 func (s *SimpleSerialProcol) onData(bytes []byte) error {
