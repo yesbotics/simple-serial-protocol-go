@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"time"
 	"yesbotics/ssp/pkg/config"
 	"yesbotics/ssp/pkg/simple_serial_protocol"
 )
@@ -12,7 +13,7 @@ func main() {
 
 	fmt.Println("Starting echo example.")
 
-	portname := "/dev/ttyUSB1"
+	portname := "/dev/ttyUSB0"
 	baudrate := 9600
 
 	fmt.Printf("use portname: %s\n", portname)
@@ -20,7 +21,7 @@ func main() {
 
 	arduino := simple_serial_protocol.NewSsp(portname, baudrate)
 
-	fmt.Printf("Registering command.")
+	fmt.Printf("Registering command.\n")
 
 	//b := make([]byte, 8)
 	//binary.LittleEndian.PutUint64(b, 18446744073709551615)
@@ -50,7 +51,7 @@ func main() {
 		return
 	}
 
-	fmt.Printf("Connected.\n")
+	fmt.Println("Connected. Listening for commands.")
 
 	write := config.NewWriteCommandConfig(
 		byte('r'),
@@ -76,16 +77,6 @@ func main() {
 		},
 	)
 
-	fmt.Println("Writing command.")
-
-	err = arduino.WriteCommand(write)
-	if err != nil {
-		fmt.Printf("Could not write command: %s\n", err)
-		return
-	}
-
-	fmt.Println("Command written.")
-
 	stopChan := make(chan struct{})
 	go func() {
 		_, err := bufio.NewReader(os.Stdin).ReadBytes('\n')
@@ -94,6 +85,16 @@ func main() {
 		}
 		stopChan <- struct{}{}
 	}()
+
+	time.Sleep(3 * time.Second)
+
+	fmt.Println("Writing command.")
+	err = arduino.WriteCommand(write)
+	if err != nil {
+		fmt.Printf("Could not write command: %s\n", err)
+		return
+	}
+	fmt.Println("Command written.")
 
 	fmt.Println("Press ENTER to close application...")
 	<-stopChan
