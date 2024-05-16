@@ -6,30 +6,31 @@ import (
 )
 
 type bufferCreator struct {
-	types map[config.ParamType]any
+	types map[config.ParamType]types.Type
 }
 
-var BufferCeator bufferCreator = newBufferCreator()
+var BufferCeator = newBufferCreator()
 
 func newBufferCreator() bufferCreator {
 
 	creator := bufferCreator{
-		types: make(map[config.ParamType]any),
+		types: make(map[config.ParamType]types.Type),
 	}
 
-	creator.types[config.ParamTypeBool] = types.TypeBool{}
-	creator.types[config.ParamTypeByte] = types.TypeByte{}
-	creator.types[config.ParamTypeInt8] = types.TypeInt8{}
-	creator.types[config.ParamTypeInt16] = types.TypeInt16{}
-	creator.types[config.ParamTypeInt32] = types.TypeInt32{}
-	creator.types[config.ParamTypeInt64] = types.TypeInt64{}
-	creator.types[config.ParamTypeUint8] = types.TypeUint8{}
-	creator.types[config.ParamTypeUint16] = types.TypeUint16{}
-	creator.types[config.ParamTypeUint32] = types.TypeUint32{}
-	creator.types[config.ParamTypeUint64] = types.TypeUint64{}
-	creator.types[config.ParamTypeFloat32] = types.TypeFloat32{}
-	creator.types[config.ParamTypeFloat64] = types.TypeFloat64{}
-	creator.types[config.ParamTypeString] = types.TypeString{}
+	creator.types[config.ParamTypeBool] = types.NewTypeBool()
+	creator.types[config.ParamTypeByte] = types.NewTypeByte()
+	creator.types[config.ParamTypeChar] = types.NewTypeChar()
+	creator.types[config.ParamTypeInt8] = types.NewTypeInt8()
+	creator.types[config.ParamTypeInt16] = types.NewTypeInt16()
+	creator.types[config.ParamTypeInt32] = types.NewTypeInt32()
+	creator.types[config.ParamTypeInt64] = types.NewTypeInt64()
+	creator.types[config.ParamTypeUint8] = types.NewTypeUint8()
+	creator.types[config.ParamTypeUint16] = types.NewTypeUint16()
+	creator.types[config.ParamTypeUint32] = types.NewTypeUint32()
+	creator.types[config.ParamTypeUint64] = types.NewTypeUint64()
+	creator.types[config.ParamTypeFloat32] = types.NewTypeFloat32()
+	creator.types[config.ParamTypeFloat64] = types.NewTypeFloat64()
+	creator.types[config.ParamTypeString] = types.NewTypeString()
 
 	return creator
 }
@@ -37,36 +38,10 @@ func newBufferCreator() bufferCreator {
 func (b *bufferCreator) GetBuffer(paramType config.ParamType, data any) []byte {
 	theType := b.types[paramType]
 
-	switch inst := theType.(type) {
-	case types.TypeByte:
-		return inst.GetBuffer(data.(uint8))
-	case types.TypeChar:
-		return inst.GetBuffer(data.(byte))
-	case types.TypeBool:
-		return inst.GetBuffer(data.(bool))
-	case types.TypeInt8:
-		return inst.GetBuffer(data.(int8))
-	case types.TypeUint8:
-		return inst.GetBuffer(data.(uint8))
-	case types.TypeInt16:
-		return inst.GetBuffer(data.(int16))
-	case types.TypeUint16:
-		return inst.GetBuffer(data.(uint16))
-	case types.TypeInt32:
-		return inst.GetBuffer(data.(int32))
-	case types.TypeUint32:
-		return inst.GetBuffer(data.(uint32))
-	case types.TypeInt64:
-		return inst.GetBuffer(data.(int64))
-	case types.TypeUint64:
-		return inst.GetBuffer(data.(uint64))
-	case types.TypeFloat32:
-		return inst.GetBuffer(data.(float32))
-	case types.TypeFloat64:
-		return inst.GetBuffer(data.(float64))
-	case types.TypeString:
-		return inst.GetBuffer(data.(string))
+	buffer, err := theType.GetBuffer(data)
+	if err != nil {
+		return []byte{}
 	}
 
-	return []byte{}
+	return buffer
 }

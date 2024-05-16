@@ -1,18 +1,36 @@
 package types
 
-import "errors"
+import (
+	"errors"
+)
 
-type TypeUint8 struct {
-	TypeBool
+type typeUint8 struct {
+	typeBool
 }
 
-func (t *TypeUint8) GetData() (uint8, error) {
+func NewTypeUint8() Type {
+	return &typeUint8{
+		typeBool{
+			baseType{
+				index:  0,
+				length: 1,
+				data:   make([]byte, 0),
+			},
+		},
+	}
+}
+
+func (t *typeUint8) GetData() (any, error) {
 	if !t.IsFull() {
 		return 0, errors.New("no data available")
 	}
 	return t.data[0], nil
 }
 
-func (t *TypeUint8) GetBuffer(data uint8) []byte {
-	return []byte{data}
+func (t *typeUint8) GetBuffer(data any) ([]byte, error) {
+	if value, ok := data.(uint8); ok {
+		return []byte{value}, nil
+	} else {
+		return nil, errors.New("type assertion to uint8 failed")
+	}
 }

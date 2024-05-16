@@ -1,27 +1,24 @@
 package types
 
-type BaseType struct {
+type baseType struct {
 	data   []byte
 	index  uint32
 	length uint32
 }
 
-func (b *BaseType) Reset() {
+func (b *baseType) Reset() {
 	b.index = 0
 }
 
-func (b *BaseType) AddByte(bite byte) {
+func (b *baseType) AddByte(bite byte) {
 	b.data = append(b.data, bite)
+	b.index++
 }
 
-func (b *BaseType) IsFull() bool {
-	return b.index >= b.GetLength()
+func (b *baseType) IsFull() bool {
+	return b.index >= b.length
 }
 
-func (b *BaseType) GetLength() uint32 {
-	return 1
-}
-
-func (b *BaseType) Dispose() {
+func (b *baseType) Dispose() {
 
 }

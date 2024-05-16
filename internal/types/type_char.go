@@ -1,20 +1,21 @@
 package types
 
-type TypeChar struct {
-	TypeByte
+type typeChar struct {
+	typeByte
 }
 
-//func (t *TypeChar) GetLength() uint32 {
-//	return 1
-//}
-//
-//func (t *TypeChar) GetData() (byte, error) {
-//	if !t.IsFull() {
-//		return 0, errors.New("no data available")
-//	}
-//	return int8(t.data[0]), nil
-//}
-//
-//func (t *TypeChar) GetBuffer(data int8) []byte {
-//	return []byte{byte(data)}
-//}
+func NewTypeChar() Type {
+	return &typeChar{
+		typeByte: typeByte{
+			typeUint8{
+				typeBool: typeBool{
+					baseType: baseType{
+						index:  0,
+						length: 1,
+						data:   make([]byte, 0),
+					},
+				},
+			},
+		},
+	}
+}

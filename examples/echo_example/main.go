@@ -77,6 +77,9 @@ func main() {
 		},
 	)
 
+	//
+	// Waiting for ENTER key to exit
+	//
 	stopChan := make(chan struct{})
 	go func() {
 		_, err := bufio.NewReader(os.Stdin).ReadBytes('\n')
@@ -86,6 +89,7 @@ func main() {
 		stopChan <- struct{}{}
 	}()
 
+	fmt.Println("Give the arduino some time...")
 	time.Sleep(3 * time.Second)
 
 	fmt.Println("Writing command.")
@@ -106,19 +110,19 @@ func onRead(args ...any) {
 	fmt.Println("Received several values from Arduino:")
 	fmt.Printf("byteValue: %#x \n", args[0])
 	fmt.Printf("booleanValue: %t \n", args[1])
-	fmt.Printf("int8Value: %d \n", args[2])
-	fmt.Printf("uint8Value: %d \n", args[3])
-	fmt.Printf("int16Value: %d \n", args[4])
-	fmt.Printf("uint16Value: %d \n", args[5])
-	fmt.Printf("int32Value: %d \n", args[6])
-	fmt.Printf("uint32Value: %d \n", args[7])
-	fmt.Printf("int64Value: %d \n", args[8])
-	fmt.Printf("uint64Value: %d \n", args[9])
-	fmt.Printf("float32Value: %f \n", args[10])
-	fmt.Printf("charValue: %#x \n", args[11])
-	fmt.Printf("stringValue1: %s \n", args[12])
-	fmt.Printf("stringValue2: %s \n", args[13])
-	fmt.Printf("stringValue3: %s \n", args[14])
+	fmt.Printf("int8Value: %v \n", args[2])
+	//fmt.Printf("uint8Value: %d \n", args[3])
+	//fmt.Printf("int16Value: %d \n", args[4])
+	//fmt.Printf("uint16Value: %d \n", args[5])
+	//fmt.Printf("int32Value: %d \n", args[6])
+	//fmt.Printf("uint32Value: %d \n", args[7])
+	//fmt.Printf("int64Value: %d \n", args[8])
+	//fmt.Printf("uint64Value: %d \n", args[9])
+	//fmt.Printf("float32Value: %f \n", args[10])
+	//fmt.Printf("charValue: %#x \n", args[11])
+	//fmt.Printf("stringValue1: %s \n", args[12])
+	//fmt.Printf("stringValue2: %s \n", args[13])
+	//fmt.Printf("stringValue3: %s \n", args[14])
 
 	//fmt.Printf("Read data: %s", args)
 }

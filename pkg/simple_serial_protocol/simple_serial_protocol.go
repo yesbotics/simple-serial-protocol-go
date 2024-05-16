@@ -21,6 +21,8 @@ type SimpleSerialProcol struct {
 	currentCommand *parser.Command
 }
 
+var goo = types.NewTypeBool()
+
 func NewSsp(portname string, baudrate int) *SimpleSerialProcol {
 
 	mode := &serial.Mode{
@@ -42,6 +44,10 @@ func NewSsp(portname string, baudrate int) *SimpleSerialProcol {
 }
 
 func (s *SimpleSerialProcol) Open() error {
+	if s.connected {
+		return errors.New("already connected")
+	}
+
 	port, err := serial.Open(s.portname, s.mode)
 	if err != nil {
 		return err
@@ -117,7 +123,7 @@ func (s *SimpleSerialProcol) write(buffer []byte) (int, error) {
 }
 
 func (s *SimpleSerialProcol) readSerialData() {
-	buffer := make([]byte, 128)
+	buffer := make([]byte, 10)
 	for {
 		if !s.connected {
 			return
@@ -138,30 +144,29 @@ func (s *SimpleSerialProcol) readSerialData() {
 }
 
 func (s *SimpleSerialProcol) onData(bytes []byte) error {
-
-	bite := bytes[0]
-
-	if s.currentCommand != nil {
-		/**
-		 * Got command already -> reading param data
-		 */
-		if s.currentCommand.ParamsRead() {
-			if bite == types.CharEot {
-				s.currentCommand.CallCallback()
-				s.currentCommand = nil
+	for _, bite := range bytes {
+		if s.currentCommand != nil {
+			/**
+			 * Got command already -> reading param data
+			 */
+			if s.currentCommand.ParamsRead() {
+				if bite == types.CharEot {
+					s.currentCommand.CallCallback()
+					s.currentCommand = nil
+				} else {
+					return errors.New("EOT byte was not read")
+				}
 			} else {
-				return errors.New("EOT byte was not read")
+				s.currentCommand.AddByte(bite)
 			}
 		} else {
-			s.currentCommand.AddByte(bite)
-		}
-	} else {
-		command, ok := s.commands[bite]
-		if !ok {
-			return errors.New("Command not found: " + hex.EncodeToString([]byte{bite}))
-		} else {
-			s.currentCommand = command
-			s.currentCommand.ResetParamParser()
+			command, ok := s.commands[bite]
+			if !ok {
+				return errors.New("Command not found: " + hex.EncodeToString([]byte{bite}))
+			} else {
+				s.currentCommand = command
+				s.currentCommand.ResetParamParser()
+			}
 		}
 	}
 	return nil

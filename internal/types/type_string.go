@@ -1,11 +1,27 @@
 package types
 
-type TypeString struct {
-	BaseType
+import "errors"
+
+type typeString struct {
+	baseType
 	isFull bool
 }
 
-func (t *TypeString) AddByte(bite byte) {
+func NewTypeString() Type {
+	return &typeString{
+		baseType: baseType{
+			index:  0,
+			length: 0,
+			data:   make([]byte, 0),
+		},
+		isFull: false,
+	}
+}
+
+func (t *typeString) AddByte(bite byte) {
+	if t.isFull {
+		return
+	}
 	if bite == CharNull {
 		t.isFull = true
 		return
@@ -13,21 +29,25 @@ func (t *TypeString) AddByte(bite byte) {
 	t.data = append(t.data, bite)
 }
 
-func (t *TypeString) GetLength() uint32 {
-	return 1
+func (t *typeString) IsFull() bool {
+	return t.isFull
 }
 
-func (t *TypeString) GetData() (string, error) {
+func (t *typeString) GetData() (any, error) {
 	return string(t.data), nil
 }
 
-func (t *TypeString) GetBuffer(data string) []byte {
-	b := []byte(data)
-	b = append(b, CharNull)
-	return b
+func (t *typeString) GetBuffer(data any) ([]byte, error) {
+	if value, ok := data.(string); ok {
+		b := []byte(value)
+		b = append(b, CharNull)
+		return b, nil
+	} else {
+		return nil, errors.New("type assertion to string failed")
+	}
 }
 
-func (t *TypeString) Reset() {
-	t.data = nil
+func (t *typeString) Reset() {
+	t.data = make([]byte, 0)
 	t.isFull = false
 }
