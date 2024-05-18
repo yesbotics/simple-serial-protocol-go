@@ -1,4 +1,4 @@
-module yesbotics/ssp
+module yesbotics/simple-serial-protocol-go
 
 go 1.22
 

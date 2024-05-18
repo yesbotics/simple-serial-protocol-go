@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"yesbotics/ssp/pkg/config"
+	"yesbotics/simple-serial-protocol-go/pkg/config"
 )
 
 type Command struct {

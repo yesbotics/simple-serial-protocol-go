@@ -7,7 +7,6 @@ all: setup
 setup: FORCE setup-lib setup-example
 
 setup-lib: FORCE
-	mkdir -p $(BUILD_DIR)
 	go mod vendor
 	go mod tidy
 

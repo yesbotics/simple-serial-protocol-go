@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"go.bug.st/serial"
 	"log/slog"
-	"yesbotics/ssp/internal/parser"
-	"yesbotics/ssp/internal/types"
-	"yesbotics/ssp/pkg/config"
+	"yesbotics/simple-serial-protocol-go/internal/parser"
+	"yesbotics/simple-serial-protocol-go/internal/types"
+	"yesbotics/simple-serial-protocol-go/pkg/config"
 )
 
 type SimpleSerialProcol struct {
