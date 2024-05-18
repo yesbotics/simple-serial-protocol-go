@@ -46,8 +46,9 @@ func (c *Command) Dispose() {
 
 func (c *Command) CallCallback() {
 	if c.paramsParser != nil {
-		c.callback(c.paramsParser.GetData())
+		data, err := c.paramsParser.GetData()
+		c.callback(data, err)
 	} else {
-		c.callback()
+		c.callback(nil, nil)
 	}
 }

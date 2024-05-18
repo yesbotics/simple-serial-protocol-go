@@ -136,8 +136,6 @@ func (s *SimpleSerialProcol) readSerialData() {
 			return
 		}
 
-		fmt.Println("Got data!")
-
 		_ = s.onData(buffer[:n])
 	}
 

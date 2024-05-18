@@ -23,10 +23,6 @@ func main() {
 
 	fmt.Printf("Registering command.\n")
 
-	//b := make([]byte, 8)
-	//binary.LittleEndian.PutUint64(b, 18446744073709551615)
-	//fmt.Printf("byteValue: %#x \n", b)
-
 	readConfig := config.NewReadCommandConfig(byte('s'), onRead)
 	readConfig.AddParam(config.ParamTypeByte)
 	readConfig.AddParam(config.ParamTypeBool)
@@ -105,45 +101,30 @@ func main() {
 	fmt.Println("Bye bye.")
 }
 
-func onRead(args ...any) {
+func onRead(values []any, err error) {
 
-	fmt.Println("Received several values from Arduino:")
-	fmt.Printf("byteValue: %#x \n", args[0])
-	fmt.Printf("booleanValue: %t \n", args[1])
-	fmt.Printf("int8Value: %v \n", args[2])
-	//fmt.Printf("uint8Value: %d \n", args[3])
-	//fmt.Printf("int16Value: %d \n", args[4])
-	//fmt.Printf("uint16Value: %d \n", args[5])
-	//fmt.Printf("int32Value: %d \n", args[6])
-	//fmt.Printf("uint32Value: %d \n", args[7])
-	//fmt.Printf("int64Value: %d \n", args[8])
-	//fmt.Printf("uint64Value: %d \n", args[9])
-	//fmt.Printf("float32Value: %f \n", args[10])
-	//fmt.Printf("charValue: %#x \n", args[11])
-	//fmt.Printf("stringValue1: %s \n", args[12])
-	//fmt.Printf("stringValue2: %s \n", args[13])
-	//fmt.Printf("stringValue3: %s \n", args[14])
+	if err != nil {
+		fmt.Printf("Got an error: %s\n", err)
+		return
+	}
 
-	//fmt.Printf("Read data: %s", args)
+	fmt.Printf("byteValue: %#x \n", values[0])
+	fmt.Printf("booleanValue: %t \n", values[1])
+	fmt.Printf("int8Value: %v \n", values[2])
+	fmt.Printf("uint8Value: %d \n", values[3])
+	fmt.Printf("int16Value: %d \n", values[4])
+	fmt.Printf("uint16Value: %d \n", values[5])
+	fmt.Printf("int32Value: %d \n", values[6])
+	fmt.Printf("uint32Value: %d \n", values[7])
+	fmt.Printf("int64Value: %d \n", values[8])
+	fmt.Printf("uint64Value: %d \n", values[9])
+	fmt.Printf("float32Value: %f \n", values[10])
+	fmt.Printf("charValue: %#x \n", values[11])
+	fmt.Printf("stringValue1: %s \n", values[12])
+	fmt.Printf("stringValue2: %s \n", values[13])
+	fmt.Printf("stringValue3: %s \n", values[14])
+
+	fmt.Println("I have successfully received all the data from the Arduino. Bye bye.")
+
+	os.Exit(0)
 }
-
-//#72#ff
-//#ff
-//#01
-//#80
-//#ff
-//#00#80
-//#ff#ff
-//#00#00#00#80
-//#ff#ff#ff#ff
-//#00#00#00#00#00#00#00#80
-//#ff#ff#ff#ff#ff#ff#ff#ff
-//#ff#ff#ff#ff
-//#4a
-//#74#65#78#74#31#3a#20#48#65#79#2c#20#49#27#6d#20#74#65#78#74#20#6f#6e#65#21#00
-//#74#65#78#74#32#3a#20#41#6e#64#20#49#20#61#6d#20#68#69#73#20#62#72#6f#74#68#65#72#20#74#65#78#74#20#74#77#6f#21#00
-//#74#65#78#74#33#3a#20#4e#69#63#65#21#00
-//#0a
-//
-//
-//#72#ff#ff#01#80#ff#00#80#ff#ff#00#00#00#80#ff#ff#ff#ff#00#00#00#00#00#00#00#80#ff#ff#ff#ff#ff#ff#ff#ff#ff#ff#ff#ff#4a#74#65#78#74#31#3a#20#48#65#79#2c#20#49#27#6d#20#74#65#78#74#20#6f#6e#65#21#00#74#65#78#74#32#3a#20#41#6e#64#20#49#20#61#6d#20#68#69#73#20#62#72#6f#74#68#65#72#20#74#65#78#74#20#74#77#6f#21#00#74#65#78#74#33#3a#20#4e#69#63#65#21#00#0a

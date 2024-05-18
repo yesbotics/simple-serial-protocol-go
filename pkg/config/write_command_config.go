@@ -1,6 +1,6 @@
 package config
 
-type CommandCallback func(args ...any)
+type CommandCallback func(values []any, err error)
 
 type CommandParam struct {
 	ParamType ParamType
