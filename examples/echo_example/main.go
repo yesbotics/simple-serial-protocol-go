@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 	"time"
-	"yesbotics/simple-serial-protocol-go/pkg/config"
-	"yesbotics/simple-serial-protocol-go/pkg/simple_serial_protocol"
+	"yesbotics/ssp/pkg/config"
+	"yesbotics/ssp/pkg/simple_serial_protocol"
 )
 
 func main() {

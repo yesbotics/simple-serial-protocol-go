@@ -2,11 +2,11 @@ module ssp-example/send
 
 go 1.22
 
-replace yesbotics/simple-serial-protocol-go => ../..
+replace yesbotics/ssp => ../..
 
-replace yesbotics/simple-serial-protocol-go/pkg/simple_serial_protocol => ../../pkg/simple_serial_protocol
+replace yesbotics/ssp/pkg/simple_serial_protocol => ../../pkg/ssp
 
-require yesbotics/simple-serial-protocol-go v0.0.0-00010101000000-000000000000
+require yesbotics/ssp v0.0.0-00010101000000-000000000000
 
 require (
 	github.com/creack/goselect v0.1.2 // indirect
