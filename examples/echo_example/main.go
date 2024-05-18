@@ -13,11 +13,14 @@ func main() {
 
 	fmt.Println("Starting echo example.")
 
+	// Change this to your partner device's baudrate
 	portname := "/dev/ttyUSB0"
+
+	// Change this to your serial port name
 	baudrate := 9600
 
-	fmt.Printf("use portname: %s\n", portname)
-	fmt.Printf("use baudrate: %d\n", baudrate)
+	fmt.Printf("Use portname: %s\n", portname)
+	fmt.Printf("Use baudrate: %d\n", baudrate)
 
 	arduino := simple_serial_protocol.NewSsp(portname, baudrate)
 
@@ -49,30 +52,6 @@ func main() {
 
 	fmt.Println("Connected. Listening for commands.")
 
-	write := config.NewWriteCommandConfig(
-		byte('r'),
-		[]any{
-			byte(0xff),
-			true,
-			int8(-128),
-			uint8(255),
-			int16(-32768),
-			uint16(65535),
-			int32(-2147483648),
-			uint32(4294967295),
-
-			int64(-9223372036854775808),
-			uint64(18446744073709551615),
-
-			float32(-1.23456789101112),
-			byte('J'),
-
-			"text1: Hey, I'm text one!",
-			"text2: And I am his brother text two!",
-			"text3: Nice!",
-		},
-	)
-
 	//
 	// Waiting for ENTER key to exit
 	//
@@ -89,6 +68,26 @@ func main() {
 	time.Sleep(3 * time.Second)
 
 	fmt.Println("Writing command.")
+	write := config.NewWriteCommandConfig(
+		byte('r'),
+		[]any{
+			byte(0xff),
+			true,
+			int8(-128),
+			uint8(255),
+			int16(-32768),
+			uint16(65535),
+			int32(-2147483648),
+			uint32(4294967295),
+			int64(-9223372036854775808),
+			uint64(18446744073709551615),
+			float32(-1.2345678),
+			byte('J'),
+			"text1: Hey, I'm text one!",
+			"text2: And I am his brother text two!",
+			"text3: Nice!",
+		},
+	)
 	err = arduino.WriteCommand(write)
 	if err != nil {
 		fmt.Printf("Could not write command: %s\n", err)
@@ -101,30 +100,28 @@ func main() {
 	fmt.Println("Bye bye.")
 }
 
-func onRead(values []any, err error) {
+func onRead(params []any, err error) {
 
 	if err != nil {
 		fmt.Printf("Got an error: %s\n", err)
 		return
 	}
 
-	fmt.Printf("byteValue: %#x \n", values[0])
-	fmt.Printf("booleanValue: %t \n", values[1])
-	fmt.Printf("int8Value: %v \n", values[2])
-	fmt.Printf("uint8Value: %d \n", values[3])
-	fmt.Printf("int16Value: %d \n", values[4])
-	fmt.Printf("uint16Value: %d \n", values[5])
-	fmt.Printf("int32Value: %d \n", values[6])
-	fmt.Printf("uint32Value: %d \n", values[7])
-	fmt.Printf("int64Value: %d \n", values[8])
-	fmt.Printf("uint64Value: %d \n", values[9])
-	fmt.Printf("float32Value: %f \n", values[10])
-	fmt.Printf("charValue: %#x \n", values[11])
-	fmt.Printf("stringValue1: %s \n", values[12])
-	fmt.Printf("stringValue2: %s \n", values[13])
-	fmt.Printf("stringValue3: %s \n", values[14])
+	fmt.Printf("byteValue: %#x \n", params[0])
+	fmt.Printf("booleanValue: %t \n", params[1])
+	fmt.Printf("int8Value: %v \n", params[2])
+	fmt.Printf("uint8Value: %d \n", params[3])
+	fmt.Printf("int16Value: %d \n", params[4])
+	fmt.Printf("uint16Value: %d \n", params[5])
+	fmt.Printf("int32Value: %d \n", params[6])
+	fmt.Printf("uint32Value: %d \n", params[7])
+	fmt.Printf("int64Value: %d \n", params[8])
+	fmt.Printf("uint64Value: %d \n", params[9])
+	fmt.Printf("float32Value: %f \n", params[10])
+	fmt.Printf("charValue: %#x / %v\n", params[11], params[11])
+	fmt.Printf("stringValue1: %s \n", params[12])
+	fmt.Printf("stringValue2: %s \n", params[13])
+	fmt.Printf("stringValue3: %s \n", params[14])
 
-	fmt.Println("I have successfully received all the data from the Arduino. Bye bye.")
-
-	os.Exit(0)
+	fmt.Println("I have successfully received all the data from the Arduino. Press ENTER to exit.")
 }
