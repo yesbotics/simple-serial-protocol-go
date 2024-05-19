@@ -16,9 +16,6 @@ type ParamsParser struct {
 
 func NewParamsParser(paramTypes []config.ParamType) *ParamsParser {
 
-	//var test = params.typeByte{}
-	//var typeInstances []*params.Type = make([]*params.Type, 0)
-	//var typeInstances []*params.Type
 	var params []types.Type
 
 	for _, paramType := range paramTypes {

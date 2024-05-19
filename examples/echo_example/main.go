@@ -105,6 +105,10 @@ func onRead(params []any, err error) {
 		return
 	}
 
+	fmt.Println("")
+	fmt.Println("Got data from arduino:")
+	fmt.Println("")
+
 	fmt.Printf("byteValue: %#x \n", params[0])
 	fmt.Printf("booleanValue: %t \n", params[1])
 	fmt.Printf("int8Value: %v \n", params[2])
@@ -120,6 +124,8 @@ func onRead(params []any, err error) {
 	fmt.Printf("stringValue1: %s \n", params[12])
 	fmt.Printf("stringValue2: %s \n", params[13])
 	fmt.Printf("stringValue3: %s \n", params[14])
+
+	fmt.Println("")
 
 	fmt.Println("I have successfully received all the data from the Arduino. Press ENTER to exit.")
 }

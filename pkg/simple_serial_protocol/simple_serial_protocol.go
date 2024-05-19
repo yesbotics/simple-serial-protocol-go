@@ -3,7 +3,6 @@ package simple_serial_protocol
 import (
 	"encoding/hex"
 	"errors"
-	"fmt"
 	"github.com/yesbotics/simple-serial-protocol-go/internal/parser"
 	"github.com/yesbotics/simple-serial-protocol-go/internal/types"
 	"github.com/yesbotics/simple-serial-protocol-go/pkg/config"
@@ -20,8 +19,6 @@ type SimpleSerialProcol struct {
 	connected      bool
 	currentCommand *parser.Command
 }
-
-var goo = types.NewTypeBool()
 
 func NewSsp(portname string, baudrate int) *SimpleSerialProcol {
 
@@ -118,7 +115,7 @@ func (s *SimpleSerialProcol) WriteCommand(config *config.WriteCommandConfig) err
 }
 
 func (s *SimpleSerialProcol) write(buffer []byte) (int, error) {
-	fmt.Printf("Write: %#x\n", buffer)
+	slog.Debug("Write: %#x\n", buffer)
 	return (*s.port).Write(buffer)
 }
 
@@ -131,8 +128,7 @@ func (s *SimpleSerialProcol) readSerialData() {
 
 		n, err := (*s.port).Read(buffer)
 		if err != nil {
-			fmt.Println("readSerialData cancel")
-			slog.Error(fmt.Sprintf("\"Could not read serial data: %s", err))
+			slog.Error("\"Could not read serial data: ", err)
 			return
 		}
 
