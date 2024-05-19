@@ -1,8 +1,8 @@
 package parser
 
 import (
-	"yesbotics/ssp/internal/types"
-	"yesbotics/ssp/pkg/config"
+	"github.com/yesbotics/simple-serial-protocol-go/internal/types"
+	"github.com/yesbotics/simple-serial-protocol-go/pkg/config"
 )
 
 type bufferCreator struct {

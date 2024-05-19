@@ -3,13 +3,23 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/yesbotics/simple-serial-protocol-go/pkg/config"
+	"github.com/yesbotics/simple-serial-protocol-go/pkg/simple_serial_protocol"
 	"os"
 	"time"
-	"yesbotics/ssp/pkg/config"
-	"yesbotics/ssp/pkg/simple_serial_protocol"
 )
 
 func main() {
+
+	// Press ENTER key to exit
+	stopChan := make(chan struct{})
+	go func() {
+		_, err := bufio.NewReader(os.Stdin).ReadBytes('\n')
+		if err != nil {
+
+		}
+		stopChan <- struct{}{}
+	}()
 
 	fmt.Println("Starting echo example.")
 
@@ -51,18 +61,6 @@ func main() {
 	}
 
 	fmt.Println("Connected. Listening for commands.")
-
-	//
-	// Waiting for ENTER key to exit
-	//
-	stopChan := make(chan struct{})
-	go func() {
-		_, err := bufio.NewReader(os.Stdin).ReadBytes('\n')
-		if err != nil {
-
-		}
-		stopChan <- struct{}{}
-	}()
 
 	fmt.Println("Give the arduino some time...")
 	time.Sleep(3 * time.Second)
@@ -118,7 +116,7 @@ func onRead(params []any, err error) {
 	fmt.Printf("int64Value: %d \n", params[8])
 	fmt.Printf("uint64Value: %d \n", params[9])
 	fmt.Printf("float32Value: %f \n", params[10])
-	fmt.Printf("charValue: %#x / %v\n", params[11], params[11])
+	fmt.Printf("charValue: %#x / %s\n", params[11], string(params[11].(byte)))
 	fmt.Printf("stringValue1: %s \n", params[12])
 	fmt.Printf("stringValue2: %s \n", params[13])
 	fmt.Printf("stringValue3: %s \n", params[14])

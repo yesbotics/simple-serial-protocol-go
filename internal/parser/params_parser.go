@@ -2,8 +2,8 @@ package parser
 
 import (
 	"errors"
-	"yesbotics/ssp/internal/types"
-	"yesbotics/ssp/pkg/config"
+	"github.com/yesbotics/simple-serial-protocol-go/internal/types"
+	"github.com/yesbotics/simple-serial-protocol-go/pkg/config"
 )
 
 type ParamsParser struct {

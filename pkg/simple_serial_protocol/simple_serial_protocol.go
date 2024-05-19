@@ -4,11 +4,11 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"github.com/yesbotics/simple-serial-protocol-go/internal/parser"
+	"github.com/yesbotics/simple-serial-protocol-go/internal/types"
+	"github.com/yesbotics/simple-serial-protocol-go/pkg/config"
 	"go.bug.st/serial"
 	"log/slog"
-	"yesbotics/ssp/internal/parser"
-	"yesbotics/ssp/internal/types"
-	"yesbotics/ssp/pkg/config"
 )
 
 type SimpleSerialProcol struct {

@@ -1,8 +1,6 @@
-module yesbotics/ssp
+module github.com/yesbotics/simple-serial-protocol-go
 
 go 1.22
-
-replace github.com/yesbotics/simple-serial-protocol-go => .
 
 require go.bug.st/serial v1.6.2
 
