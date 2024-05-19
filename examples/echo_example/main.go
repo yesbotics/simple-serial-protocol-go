@@ -62,7 +62,7 @@ func main() {
 
 	fmt.Println("Connected. Listening for commands.")
 
-	fmt.Println("Give the arduino some time...")
+	fmt.Println("Give the Arduino some time...")
 	time.Sleep(3 * time.Second)
 
 	fmt.Println("Writing command.")
@@ -106,7 +106,7 @@ func onRead(params []any, err error) {
 	}
 
 	fmt.Println("")
-	fmt.Println("Got data from arduino:")
+	fmt.Println("Got data from Arduino:")
 	fmt.Println("")
 
 	fmt.Printf("byteValue: %#x \n", params[0])
