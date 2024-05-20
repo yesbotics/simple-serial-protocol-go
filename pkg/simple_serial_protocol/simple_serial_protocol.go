@@ -10,7 +10,7 @@ import (
 	"log/slog"
 )
 
-type SimpleSerialProcol struct {
+type SimpleSerialProtocol struct {
 	portname       string
 	baudrate       int
 	commands       map[byte]*parser.Command
@@ -20,7 +20,7 @@ type SimpleSerialProcol struct {
 	currentCommand *parser.Command
 }
 
-func NewSsp(portname string, baudrate int) *SimpleSerialProcol {
+func NewSimpleSerialProtocol(portname string, baudrate int) *SimpleSerialProtocol {
 
 	mode := &serial.Mode{
 		BaudRate: baudrate,
@@ -29,7 +29,7 @@ func NewSsp(portname string, baudrate int) *SimpleSerialProcol {
 		StopBits: serial.OneStopBit,
 	}
 
-	return &SimpleSerialProcol{
+	return &SimpleSerialProtocol{
 		portname:       portname,
 		baudrate:       baudrate,
 		commands:       make(map[byte]*parser.Command),
@@ -40,7 +40,7 @@ func NewSsp(portname string, baudrate int) *SimpleSerialProcol {
 	}
 }
 
-func (s *SimpleSerialProcol) Open() error {
+func (s *SimpleSerialProtocol) Open() error {
 	if s.connected {
 		return errors.New("already connected")
 	}
@@ -58,7 +58,7 @@ func (s *SimpleSerialProcol) Open() error {
 	return nil
 }
 
-func (s *SimpleSerialProcol) Close() {
+func (s *SimpleSerialProtocol) Close() {
 	s.connected = false
 	if s.port != nil {
 		_ = (*s.port).Close()
@@ -66,12 +66,12 @@ func (s *SimpleSerialProcol) Close() {
 	s.port = nil
 }
 
-func (s *SimpleSerialProcol) Dispose() {
+func (s *SimpleSerialProtocol) Dispose() {
 	s.Close()
 	s.commands = make(map[byte]*parser.Command)
 }
 
-func (s *SimpleSerialProcol) RegisterCommand(command *config.ReadCommandConfig) {
+func (s *SimpleSerialProtocol) RegisterCommand(command *config.ReadCommandConfig) {
 	s.commands[command.GetCommandId()] = parser.NewCommand(
 		command.GetCommandId(),
 		command.GetCallback(),
@@ -79,11 +79,11 @@ func (s *SimpleSerialProcol) RegisterCommand(command *config.ReadCommandConfig) 
 	)
 }
 
-//func (s *SimpleSerialProcol) RegisterCommand(commandId byte, callback CommandCallback) {
+//func (s *SimpleSerialProtocol) RegisterCommand(commandId byte, callback CommandCallback) {
 //	s.commands[commandId] = parser.NewCommand(commandId, callback)
 //}
 
-func (s *SimpleSerialProcol) UnregisterCommand(commandId byte) {
+func (s *SimpleSerialProtocol) UnregisterCommand(commandId byte) {
 	command := s.commands[commandId]
 	if command != nil {
 		command.Dispose()
@@ -91,7 +91,7 @@ func (s *SimpleSerialProcol) UnregisterCommand(commandId byte) {
 	delete(s.commands, commandId)
 }
 
-func (s *SimpleSerialProcol) WriteCommand(config *config.WriteCommandConfig) error {
+func (s *SimpleSerialProtocol) WriteCommand(config *config.WriteCommandConfig) error {
 	_, err := s.write([]byte{config.GetCommandId()})
 	if err != nil {
 		return err
@@ -114,12 +114,12 @@ func (s *SimpleSerialProcol) WriteCommand(config *config.WriteCommandConfig) err
 	return nil
 }
 
-func (s *SimpleSerialProcol) write(buffer []byte) (int, error) {
+func (s *SimpleSerialProtocol) write(buffer []byte) (int, error) {
 	slog.Debug("Write: %#x\n", buffer)
 	return (*s.port).Write(buffer)
 }
 
-func (s *SimpleSerialProcol) readSerialData() {
+func (s *SimpleSerialProtocol) readSerialData() {
 	buffer := make([]byte, 10)
 	for {
 		if !s.connected {
@@ -137,7 +137,7 @@ func (s *SimpleSerialProcol) readSerialData() {
 
 }
 
-func (s *SimpleSerialProcol) onData(bytes []byte) error {
+func (s *SimpleSerialProtocol) onData(bytes []byte) error {
 	for _, bite := range bytes {
 		if s.currentCommand != nil {
 			/**

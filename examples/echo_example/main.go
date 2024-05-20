@@ -32,7 +32,7 @@ func main() {
 	fmt.Printf("Use portname: %s\n", portname)
 	fmt.Printf("Use baudrate: %d\n", baudrate)
 
-	arduino := simple_serial_protocol.NewSsp(portname, baudrate)
+	arduino := simple_serial_protocol.NewSimpleSerialProtocol(portname, baudrate)
 
 	fmt.Printf("Registering command.\n")
 
