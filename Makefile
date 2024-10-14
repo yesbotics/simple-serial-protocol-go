@@ -29,5 +29,10 @@ run-example: FORCE setup
 
 dev: FORCE run-example
 
+update: FORCE
+	go get -u ./...
+	go mod vendor
+	go mod tidy
+
 .PHONY: FORCE
 FORCE:
