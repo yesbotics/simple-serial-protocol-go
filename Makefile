@@ -16,10 +16,9 @@ setup-example: FORCE
 	go mod tidy
 
 update: FORCE
-	go get -u
+	go get -u ./...
 	go mod vendor
 	go mod tidy
-
 
 test: FORCE
 
@@ -29,10 +28,8 @@ run-example: FORCE setup
 
 dev: FORCE run-example
 
-update: FORCE
-	go get -u ./...
-	go mod vendor
-	go mod tidy
+test: FORCE
+	go test ./...
 
 .PHONY: FORCE
 FORCE:

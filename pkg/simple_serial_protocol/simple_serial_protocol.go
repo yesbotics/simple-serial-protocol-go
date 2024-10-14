@@ -3,6 +3,7 @@ package simple_serial_protocol
 import (
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"github.com/yesbotics/simple-serial-protocol-go/internal/parser"
 	"github.com/yesbotics/simple-serial-protocol-go/internal/types"
 	"github.com/yesbotics/simple-serial-protocol-go/pkg/config"
@@ -115,7 +116,7 @@ func (s *SimpleSerialProtocol) WriteCommand(config *config.WriteCommandConfig) e
 }
 
 func (s *SimpleSerialProtocol) write(buffer []byte) (int, error) {
-	slog.Debug("Write: %#x\n", buffer)
+	slog.Debug("Write", "data", fmt.Sprintf("%#x", buffer))
 	return (*s.port).Write(buffer)
 }
 
@@ -128,7 +129,7 @@ func (s *SimpleSerialProtocol) readSerialData() {
 
 		n, err := (*s.port).Read(buffer)
 		if err != nil {
-			slog.Error("\"Could not read serial data: ", err)
+			slog.Error("\"Could not read serial data", slog.Any("data", err))
 			return
 		}
 
